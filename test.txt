@@ -1,158 +1,136 @@
 {
-    "dns": {
-        "hosts": {
-            "domain:googleapis.cn": "googleapis.com"
-        },
-        "servers": [
-            "1.1.1.1"
+  "dns": {
+    "hosts": {
+      "domain:googleapis.cn": "googleapis.com"
+    },
+    "servers": [
+      "1.1.1.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": true
+      },
+      "tag": "socks"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "loglevel": "warning"
+  },
+  "outbounds": [
+    {
+      "mux": {
+        "concurrency": -1,
+        "enabled": false,
+        "xudpConcurrency": 8,
+        "xudpProxyUDP443": ""
+      },
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "www.cloud2music.ir",
+            "port": 443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "",
+                "id": "e1ce3fe1-c6d2-4f56-99ac-7b2e8590492c",
+                "level": 8,
+                "security": "auto"
+              }
+            ]
+          }
         ]
-    },
-    "inbounds": [
-        {
-            "listen": "127.0.0.1",
-            "port": 10808,
-            "protocol": "socks",
-            "settings": {
-                "auth": "noauth",
-                "udp": true,
-                "userLevel": 8
-            },
-            "sniffing": {
-                "destOverride": [
-                    "http",
-                    "tls"
-                ],
-                "enabled": true
-            },
-            "tag": "socks"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "alpn": [
+            "h2",
+            "http/1.1"
+          ],
+          "fingerprint": "randomized",
+          "publicKey": "",
+          "serverName": "s1.YCOyG.wORKerS.dev",
+          "shortId": "",
+          "show": false,
+          "spiderX": ""
         },
-        {
-            "listen": "127.0.0.1",
-            "port": 10809,
-            "protocol": "http",
-            "settings": {
-                "userLevel": 8
-            },
-            "tag": "http"
+        "wsSettings": {
+          "headers": {
+            "Host": "s1.ycoyg.woRKeRs.DeV"
+          },
+          "path": "/CEFgrACJndECt0Bl?ed=2048"
         }
-    ],
-    "log": {
-        "loglevel": "warning"
+      },
+      "tag": "proxy"
     },
-    "outbounds": [
-        {
-            "mux": {
-                "concurrency": -1,
-                "enabled": false,
-                "xudpConcurrency": 8,
-                "xudpProxyUDP443": ""
-            },
-            "protocol": "vless",
-            "settings": {
-                "vnext": [
-                    {
-                        "address": "www.ramzinex.com",
-                        "port": 443,
-                        "users": [
-                            {
-                                "encryption": "none",
-                                "flow": "",
-                                "id": "e1ce3fe1-c6d2-4f56-99ac-7b2e8590492c",
-                                "level": 8,
-                                "security": "auto"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "ws",
-                "security": "tls",
-                "tlsSettings": {
-                    "allowInsecure": true,
-                    "alpn": [
-                        "h2,http/1.1"
-                    ],
-                    "fingerprint": "randomized",
-                    "publicKey": "",
-                    "serverName": "s1.Ycoyg.woRkErS.dev",
-                    "shortId": "",
-                    "show": false,
-                    "spiderX": ""
-                },
-                "wsSettings": {
-                    "headers": {
-                        "Host": "s1.YcoYG.WORKErS.DeV"
-                    },
-                    "path": "/D-ItPkGe1p-mhtUf?ed=2048"
-                },
-                "sockopt": {
-                    "dialerProxy": "fragment",
-                    "tcpKeepAliveIdle": 100,
-                    "tcpNoDelay": true
-                }
-            },
-            "tag": "proxy"
-        },
-        {
-            "tag": "fragment",
-            "protocol": "freedom",
-            "settings": {
-                "domainStrategy": "AsIs",
-                "fragment": {
-                    "packets": "tlshello",
-                    "length": "10-20",
-                    "interval": "10-20"
-                }
-            },
-            "streamSettings": {
-                "sockopt": {
-                    "tcpKeepAliveIdle": 100,
-                    "tcpNoDelay": true
-                }
-            }
-        },
-        {
-            "protocol": "freedom",
-            "settings": {},
-            "tag": "direct"
-        },
-        {
-            "protocol": "blackhole",
-            "settings": {
-                "response": {
-                    "type": "http"
-                }
-            },
-            "tag": "block"
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
         }
-    ],
-    "policy": {
-        "levels": {
-            "8": {
-                "connIdle": 300,
-                "downlinkOnly": 1,
-                "handshake": 4,
-                "uplinkOnly": 1
-            }
-        },
-        "system": {
-            "statsOutboundUplink": true,
-            "statsOutboundDownlink": true
-        }
+      },
+      "tag": "block"
+    }
+  ],
+  "policy": {
+    "levels": {
+      "8": {
+        "connIdle": 300,
+        "downlinkOnly": 1,
+        "handshake": 4,
+        "uplinkOnly": 1
+      }
     },
-    "routing": {
-        "domainStrategy": "AsIs",
-        "rules": [
-            {
-                "ip": [
-                    "1.1.1.1"
-                ],
-                "outboundTag": "proxy",
-                "port": "53",
-                "type": "field"
-            }
-        ]
-    },
-    "stats": {}
+    "system": {
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "ip": [
+          "1.1.1.1"
+        ],
+        "outboundTag": "proxy",
+        "port": "53",
+        "type": "field"
+      }
+    ]
+  },
+  "stats": {}
 }
